@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using POS.Application.Common.Interfaces.Authentication;
 using POS.Application.Common.Interfaces.Services;
+using POS.Domain.ItemAggregate;
 using POS.Domain.UserAggregate;
 using POS.Infrastrcture.Authentication;
 

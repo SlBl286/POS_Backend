@@ -24,8 +24,7 @@ public class LoginQueryHandler :
 
     public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellationToken)
     {
-        await Task.CompletedTask;
-        var user = _userRepository.GetUserByUsername(query.Username);
+        var user = await _userRepository.GetUserByUsername(query.Username);
         if (user is null)
         {
             return Errors.Authentication.InvalidCredentials;

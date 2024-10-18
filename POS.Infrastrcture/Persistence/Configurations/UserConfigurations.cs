@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using POS.Domain.ItemAggregate;
 using POS.Domain.UserAggregate;
 using POS.Domain.UserAggregate.ValueObjects;
 

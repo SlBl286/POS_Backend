@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using POS.Domain.Common.Models;
+using POS.Domain.ItemAggregate;
 using POS.Domain.UserAggregate;
 using POS.Infrastrcture.Persistence.Interceptors;
 

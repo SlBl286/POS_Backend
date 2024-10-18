@@ -4,6 +4,7 @@ using POS.Application.Authentication.Common;
 using POS.Application.Common.Interfaces.Authentication;
 using POS.Application.Common.Interfaces.Persistence;
 using POS.Domain.Common.Errors;
+using POS.Domain.ItemAggregate;
 using POS.Domain.UserAggregate;
 
 namespace POS.Application.Authentication.Commands.Register;
@@ -23,7 +24,7 @@ public class RegisterCommandHandler :
     public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
         //Check if user already exists
-        if (_userRepository.ExistsAsync(command.Username))
+        if (await _userRepository.ExistsAsync(command.Username))
         {
             return Errors.User.DuplicateUserName;
         }

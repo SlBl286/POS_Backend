@@ -1,3 +1,4 @@
+using POS.Domain.ItemAggregate;
 using POS.Domain.UserAggregate;
 
 namespace POS.Application.Authentication.Common;

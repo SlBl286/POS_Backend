@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using POS.Application.Common.Interfaces.Persistence;
+using POS.Domain.ItemAggregate;
 using POS.Domain.UserAggregate;
 using POS.Domain.UserAggregate.ValueObjects;
 
@@ -20,22 +21,23 @@ public class UserRepository : IUserRepository
         _dbContext.SaveChanges();
     }
 
-    public User? GetUserByUsername(string username)
+    public async Task<User?> GetUserByUsername(string username)
     {
-        var user = _dbContext.Set<User>().Where(u => u.Username == username).FirstOrDefault();
+        var user = await _dbContext.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
         return user;
     }
 
-     public bool ExistsAsync(string username)
+    public async Task<bool> ExistsAsync(string username)
     {
-        if(_dbContext.Set<User>() != null){
+        if (_dbContext.Set<User>() != null)
+        {
 
-        var user =  _dbContext.Set<User>().Where(u => u.Username == username).FirstOrDefault();
-        return user is not null;
+            var user = await _dbContext.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
+            return user is not null;
         }
         else return false;
     }
-      public async  Task<bool> ExistsAsync(UserId Id)
+    public async Task<bool> ExistsAsync(UserId Id)
     {
         var user = await _dbContext.FindAsync<User>(Id.Value);
         return user is not null;
