@@ -15,6 +15,7 @@ public class POSDbContext : DbContext
     }
 
     public DbSet<User> Users { get;} =  null!;
+    public DbSet<Item> Items { get;} =  null!;
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

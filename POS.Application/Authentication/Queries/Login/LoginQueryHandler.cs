@@ -6,6 +6,7 @@ using POS.Application.Authentication.Common;
 using POS.Application.Authentication.Queries.Login;
 using POS.Application.Common.Interfaces.Authentication;
 using POS.Application.Common.Interfaces.Persistence;
+using POS.Application.Common.Interfaces.Services;
 using POS.Domain.Common.Errors;
 
 namespace POS.Application.Authentication.Queries.Login;
@@ -15,11 +16,13 @@ public class LoginQueryHandler :
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IUserRepository _userRepository;
+    private readonly IHashStringService _hashStringService;
 
-    public LoginQueryHandler(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+    public LoginQueryHandler(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository, IHashStringService hashStringService)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _userRepository = userRepository;
+        _hashStringService = hashStringService;
     }
 
     public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellationToken)
@@ -29,7 +32,8 @@ public class LoginQueryHandler :
         {
             return Errors.Authentication.InvalidCredentials;
         }
-        if (user.HashedPassword != query.Password)
+
+        if (_hashStringService.VerifyPassword(query.Password, user.HashedPassword, Convert.FromBase64String(user.Salt)))
         {
             return Errors.Authentication.InvalidCredentials;
         }

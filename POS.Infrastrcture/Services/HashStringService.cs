@@ -9,9 +9,12 @@ public class HashStringService : IHashStringService
     private readonly int _keySize = 64;
     private readonly int _iterations = 350000;
     private readonly HashAlgorithmName _hashAlgorithm = HashAlgorithmName.SHA512;
-    public string HashPassword(string password, out byte[] salt)
+
+    public byte[] GenerateSalt(){
+        return RandomNumberGenerator.GetBytes(_keySize);
+    }
+    public string HashPassword(string password,  byte[] salt)
     {
-        salt = RandomNumberGenerator.GetBytes(_keySize);
         var hash = Rfc2898DeriveBytes.Pbkdf2(
             Encoding.UTF8.GetBytes(password),
             salt,
@@ -21,7 +24,7 @@ public class HashStringService : IHashStringService
         return Convert.ToHexString(hash);
     }
     
-    bool VerifyPassword(string password, string hash, byte[] salt)
+    public bool VerifyPassword(string password, string hash, byte[] salt)
     {
         var hashToCompare = Rfc2898DeriveBytes.Pbkdf2(password, salt, _iterations, _hashAlgorithm, _keySize);
         return CryptographicOperations.FixedTimeEquals(hashToCompare, Convert.FromHexString(hash));

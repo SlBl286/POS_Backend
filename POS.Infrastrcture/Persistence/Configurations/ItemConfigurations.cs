@@ -1,30 +1,31 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using POS.Domain.ItemAggregate;
+using POS.Domain.ItemAggregate.ValueObjects;
 using POS.Domain.UserAggregate;
 using POS.Domain.UserAggregate.ValueObjects;
 
 namespace POS.Infrastrcture.Persistence.Configurations;
 
-public class MenuConfigurations : IEntityTypeConfiguration<User>
+public class ItemConfigurations : IEntityTypeConfiguration<Item>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<Item> builder)
     {
         ConfigureUserTable(builder);
 
     }
-    private void ConfigureUserTable(EntityTypeBuilder<User> builder)
+    private void ConfigureUserTable(EntityTypeBuilder<Item> builder)
     {
-        builder.ToTable("Users");
+        builder.ToTable("Items");
 
         builder.HasKey(m => m.Id);
         builder.Property(m => m.Id)
             .ValueGeneratedNever()
             .HasConversion(
                 id => id.Value,
-                value => UserId.Create(value)
+                value => ItemId.Create(value)
             );
-        builder.Property(m => m.LastName)
+        builder.Property(m => m.Avatar)
             .HasMaxLength(100);
         builder.Property(m => m.FirstName)
             .HasMaxLength(100);

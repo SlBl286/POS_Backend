@@ -25,7 +25,7 @@ public static class DependencyInjection
         services.AddAuth(configuration);
 
         services.AddSingleton<IDatetimeProvider, DatetimeProvider>();
-
+        services.AddSingleton<IHashStringService, HashStringService>();
         services.AddPersistence(configuration);
         return services;
     }

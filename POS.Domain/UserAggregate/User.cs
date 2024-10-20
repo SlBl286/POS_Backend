@@ -15,6 +15,7 @@ public sealed class User : AggregatetRoot<UserId, Guid>
     public string? Avatar { get; private set; }
     public string? Address { get; private set; }
     public string HashedPassword { get; private set; }
+    public string Salt { get; private set; }
     private User(UserId id,
                  string firstName,
                  string lastName,
@@ -24,7 +25,8 @@ public sealed class User : AggregatetRoot<UserId, Guid>
                  DateTime birthday,
                  string? avatar,
                  string? address,
-                 string hashedPassword) : base(id)
+                 string hashedPassword,
+                 string salt) : base(id)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -35,6 +37,7 @@ public sealed class User : AggregatetRoot<UserId, Guid>
         Avatar = avatar;
         Address = address;
         HashedPassword = hashedPassword;
+        Salt = salt;
     }
 
     public static User Create(string firstName,
@@ -45,9 +48,10 @@ public sealed class User : AggregatetRoot<UserId, Guid>
                               DateTime birthday,
                               string? avatar,
                               string? address,
-                              string hashedPassword)
+                              string hashedPassword,
+                              string salt)
     {
-        return new User(UserId.CreateUnique(), firstName, lastName,username, email, phoneNumber, birthday, avatar, address, hashedPassword);
+        return new User(UserId.CreateUnique(), firstName, lastName,username, email, phoneNumber, birthday, avatar, address, hashedPassword,salt);
     }
 
 #pragma warning disable CS0618

@@ -32,7 +32,8 @@ namespace POS.Infrastrcture.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("timestamp with time zone");
@@ -58,6 +59,10 @@ namespace POS.Infrastrcture.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Username")
                         .IsRequired()
