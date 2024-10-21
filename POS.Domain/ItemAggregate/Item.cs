@@ -13,7 +13,7 @@ public sealed class Item : AggregatetRoot<ItemId, Guid>
     public decimal? ImportPrice { get; private set; }
     public decimal RetailPrice { get; private set; }
     public decimal? WholesalePrice { get; private set; }
-    public UnitId? UnitId { get; private set; }
+    public UnitId UnitId { get; private set; }
     public string? Avatar { get; private set; }
     public IReadOnlyList<Barcode> Barcodes => _barcodes.AsReadOnly();
 
@@ -23,7 +23,7 @@ public sealed class Item : AggregatetRoot<ItemId, Guid>
         decimal? importPrice,
         decimal retailPrice,
         decimal? wholesalePrice,
-        UnitId? unitId,
+        UnitId unitId,
         string avatar,
         List<Barcode> barcodes
                  ) : base(id)
@@ -45,7 +45,7 @@ public sealed class Item : AggregatetRoot<ItemId, Guid>
     string name,
     decimal retailPrice,
     decimal? wholesalePrice,
-    UnitId? unitId,
+    UnitId unitId,
     string avatar,
     List<Barcode> barcodes
                             )

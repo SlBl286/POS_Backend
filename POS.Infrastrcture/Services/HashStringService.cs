@@ -23,7 +23,13 @@ public class HashStringService : IHashStringService
             _keySize);
         return Convert.ToHexString(hash);
     }
-    
+    /// <summary>
+    /// return true if password is right
+    /// </summary>
+    /// <param name="password"></param>
+    /// <param name="hash"></param>
+    /// <param name="salt"></param>
+    /// <returns></returns>
     public bool VerifyPassword(string password, string hash, byte[] salt)
     {
         var hashToCompare = Rfc2898DeriveBytes.Pbkdf2(password, salt, _iterations, _hashAlgorithm, _keySize);

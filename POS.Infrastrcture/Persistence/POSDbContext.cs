@@ -9,9 +9,11 @@ namespace POS.Infrastrcture.Persistence;
 public class POSDbContext : DbContext
 {
     private PublishDomainEventsInterceptors _publishDomainEventsInterceptors;
-    public POSDbContext(DbContextOptions<POSDbContext> options, PublishDomainEventsInterceptors publishDomainEventsInterceptors) : base(options)
+    private CreatedUpdatedAtInterceptors _createdUpdatedAtInterceptors;
+    public POSDbContext(DbContextOptions<POSDbContext> options, PublishDomainEventsInterceptors publishDomainEventsInterceptors, CreatedUpdatedAtInterceptors createdUpdatedAtInterceptors) : base(options)
     {
         _publishDomainEventsInterceptors = publishDomainEventsInterceptors;
+        _createdUpdatedAtInterceptors = createdUpdatedAtInterceptors;
     }
 
     public DbSet<User> Users { get;} =  null!;
@@ -30,6 +32,8 @@ public class POSDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.AddInterceptors(_publishDomainEventsInterceptors);
+        optionsBuilder.AddInterceptors(_createdUpdatedAtInterceptors);
+
         base.OnConfiguring(optionsBuilder);
     }
 

@@ -33,7 +33,7 @@ public class LoginQueryHandler :
             return Errors.Authentication.InvalidCredentials;
         }
 
-        if (_hashStringService.VerifyPassword(query.Password, user.HashedPassword, Convert.FromBase64String(user.Salt)))
+        if (!_hashStringService.VerifyPassword(query.Password, user.HashedPassword, Convert.FromBase64String(user.Salt)))
         {
             return Errors.Authentication.InvalidCredentials;
         }

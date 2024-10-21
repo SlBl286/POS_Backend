@@ -39,6 +39,10 @@ public class MenuConfigurations : IEntityTypeConfiguration<User>
             .HasMaxLength(int.MaxValue);
         builder.Property(m => m.Avatar)
             .HasMaxLength(255);
+        builder.Property(m => m.Salt)
+            .HasMaxLength(255);
+        builder.Property(m => m.HashedPassword)
+            .HasMaxLength(255);
         builder
        .HasIndex(u => u.Username)
        .IsUnique();

@@ -1,12 +1,16 @@
 namespace POS.Domain.Common.Models;
 
-public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
+public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents, IBaseEntity
 where TId : notnull
 {
     private readonly List<IDomainEvent> _domainEvents = new();
     public TId Id { get; protected set; }
 
     public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime UpdatedAt { get; set; }
 
     protected Entity(TId id)
     {

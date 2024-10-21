@@ -37,6 +37,7 @@ public static class DependencyInjection
         services.AddSingleton(Options.Create(dbSettings));
         services.AddDbContext<POSDbContext>(options => options.UseNpgsql(dbSettings.POSDb));
         services.AddScoped<PublishDomainEventsInterceptors>();
+        services.AddScoped<CreatedUpdatedAtInterceptors>();
         services.AddRepositories();
 
         return services;
