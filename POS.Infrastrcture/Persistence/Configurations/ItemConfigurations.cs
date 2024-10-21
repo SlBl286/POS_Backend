@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using POS.Domain.ItemAggregate;
 using POS.Domain.ItemAggregate.ValueObjects;
+using POS.Domain.UnitAggregate.ValueObjects;
 using POS.Domain.UserAggregate;
 using POS.Domain.UserAggregate.ValueObjects;
 
@@ -25,23 +26,22 @@ public class ItemConfigurations : IEntityTypeConfiguration<Item>
                 id => id.Value,
                 value => ItemId.Create(value)
             );
-        builder.Property(m => m.Avatar)
+        builder.Property(m => m.Code)
             .HasMaxLength(100);
-        builder.Property(m => m.FirstName)
-            .HasMaxLength(100);
-        builder.Property(m => m.Username)
-            .HasMaxLength(100);
-        builder.Property(m => m.Email)
-            .HasMaxLength(100);
-        builder.Property(m => m.PhoneNumber)
-            .HasMaxLength(100);
-        builder.Property(m => m.Birthday);
-        builder.Property(m => m.Address)
-            .HasMaxLength(int.MaxValue);
-        builder.Property(m => m.Avatar)
+        builder.Property(m => m.Name)
             .HasMaxLength(255);
+        builder.Property(m => m.Avatar)
+            .HasMaxLength(100);
+        builder.Property(m => m.ImportPrice);
+        builder.Property(m => m.RetailPrice);
+        builder.Property(m => m.WholesalePrice);
+         builder.Property(m => m.UnitId)
+            .HasConversion(
+                id =>  id!.Value,
+                value => UnitId.CreateNullable(value)
+            );
         builder
-       .HasIndex(u => u.Username)
+       .HasIndex(u => u.Code)
        .IsUnique();
 
     }

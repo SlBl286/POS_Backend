@@ -2,9 +2,9 @@ using POS.Domain.Common.Models;
 
 namespace POS.Domain.ItemAggregate.ValueObjects;
 
-public class ItemId : AggregateRootId<Guid>
+public sealed class ItemId : AggregateRootId<Guid>
 {
-    public override Guid Value { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
+    public override Guid Value { get; protected set; }
     private ItemId(Guid value)
     {
         Value = value;
