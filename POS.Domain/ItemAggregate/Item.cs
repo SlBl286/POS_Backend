@@ -40,6 +40,7 @@ public sealed class Item : AggregatetRoot<ItemId, Guid>
     }
 
     public static Item Create(
+        ItemId id,
     string code,
     decimal? importPrice,
     string name,
@@ -50,7 +51,7 @@ public sealed class Item : AggregatetRoot<ItemId, Guid>
     List<Barcode> barcodes
                             )
     {
-        return new Item(ItemId.CreateUnique(), code, name, importPrice, retailPrice, wholesalePrice, unitId, avatar,barcodes);
+        return new Item(id, code, name, importPrice, retailPrice, wholesalePrice, unitId, avatar, barcodes);
     }
 
 #pragma warning disable CS0618

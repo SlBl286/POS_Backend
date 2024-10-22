@@ -67,6 +67,67 @@ namespace POS.Infrastrcture.Migrations
                     b.ToTable("Items", (string)null);
                 });
 
+            modelBuilder.Entity("POS.Domain.ItemCategoryAggregate.ItemCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("ItemCategorys", (string)null);
+                });
+
+            modelBuilder.Entity("POS.Domain.UnitAggregate.Unit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Units", (string)null);
+                });
+
             modelBuilder.Entity("POS.Domain.UserAggregate.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -163,6 +224,44 @@ namespace POS.Infrastrcture.Migrations
                         });
 
                     b.Navigation("Barcodes");
+                });
+
+            modelBuilder.Entity("POS.Domain.ItemCategoryAggregate.ItemCategory", b =>
+                {
+                    b.OwnsMany("POS.Domain.ItemCategoryAggregate.Entities.ItemItemCategory", "Items", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("ItemItemCategoryId");
+
+                            b1.Property<Guid>("ItemCategoryId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime>("CreatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<Guid>("ItemId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<decimal>("Quantity")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("numeric")
+                                .HasDefaultValue(0m);
+
+                            b1.Property<DateTime>("UpdatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.HasKey("Id", "ItemCategoryId");
+
+                            b1.HasIndex("ItemCategoryId");
+
+                            b1.ToTable("ItemItemCategorys", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ItemCategoryId");
+                        });
+
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

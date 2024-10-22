@@ -6,7 +6,7 @@ using POS.Domain.UserAggregate.ValueObjects;
 
 namespace POS.Infrastrcture.Persistence.Configurations;
 
-public class MenuConfigurations : IEntityTypeConfiguration<User>
+public class UserConfigurations : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

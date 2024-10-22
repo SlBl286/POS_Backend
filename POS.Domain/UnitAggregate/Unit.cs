@@ -5,11 +5,11 @@ using POS.Domain.UnitAggregate.ValueObjects;
 
 namespace POS.Domain.UnitAggregate;
 
-public sealed class Unit : AggregatetRoot<ItemCategoryId, Guid>
+public sealed class Unit : AggregatetRoot<UnitId, Guid>
 {
     public string Code { get; private set; }
     public string Name { get; private set; }
-    private Unit(ItemCategoryId id,
+    private Unit(UnitId id,
         string code,
         string name
     ) : base(id)
@@ -18,12 +18,12 @@ public sealed class Unit : AggregatetRoot<ItemCategoryId, Guid>
         Name = name;
     }
 
-    public static Unit Create(ItemCategoryId id,
+    public static Unit Create(UnitId id,
     string code,
     string name
                             )
     {
-        return new Unit(ItemCategoryId.CreateUnique(), code, name);
+        return new Unit(UnitId.CreateUnique(), code, name);
     }
 
 #pragma warning disable CS0618

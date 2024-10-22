@@ -16,22 +16,28 @@ public sealed class ItemCategory : AggregatetRoot<ItemCategoryId, Guid>
         string code,
         string name,
         string? description,
-        List<ItemItemCategory> items
+        List<ItemItemCategory> items,
+        DateTime? updatedAt,
+        DateTime? createdAt
         ) : base(id)
     {
         Code = code;
         Name = name;
         Description = description;
         _items = items;
+        if(updatedAt is not null)
+            UpdatedAt = updatedAt.Value;
+        if(createdAt is not null)
+            CreatedAt = createdAt.Value;            
     }
 
     public static ItemCategory Create(ItemCategoryId id,
     string code,
     string name,
     string? description,
-    List<ItemItemCategory> items)
+    List<ItemItemCategory> items,DateTime? updatedAt = null,DateTime? createdAt = null)
     {
-        return new ItemCategory(ItemCategoryId.CreateUnique(), code, name,description,items);
+        return new ItemCategory(id, code, name, description, items,updatedAt,createdAt);
     }
 
 #pragma warning disable CS0618

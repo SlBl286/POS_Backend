@@ -11,6 +11,7 @@ public class ApiController : ControllerBase
 {
     protected IActionResult Problem(List<Error> errors)
     {
+        HttpContext.Items[HttpContextItemKeys.Errors] = errors;
         if (errors.Count is 0)
         {
             return Problem();
@@ -19,8 +20,6 @@ public class ApiController : ControllerBase
         {
             return ValidationProblem(errors);
         }
-        HttpContext.Items[HttpContextItemKeys.Errors] = errors;
-
         return Problem(errors[0]);
     }
 

@@ -17,4 +17,14 @@ public class ItemCategoryId : AggregateRootId<Guid>
     {
         return new(Guid.NewGuid());
     }
+
+    public static ItemCategoryId Create(Guid guid)
+    {
+        return new(guid);
+    }
+
+      public static ItemCategoryId Create(string str)
+    {
+        return new(Guid.Parse(str));
+    }
 }

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using POS.Domain.Common.Models;
 using POS.Domain.ItemAggregate;
+using POS.Domain.ItemCategoryAggregate;
+using POS.Domain.UnitAggregate;
 using POS.Domain.UserAggregate;
 using POS.Infrastrcture.Persistence.Interceptors;
 
@@ -18,7 +20,8 @@ public class POSDbContext : DbContext
 
     public DbSet<User> Users { get;} =  null!;
     public DbSet<Item> Items { get;} =  null!;
-
+    public DbSet<ItemCategory> ItemCategories { get;} =  null!;
+    public DbSet<Unit> Units { get;} = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

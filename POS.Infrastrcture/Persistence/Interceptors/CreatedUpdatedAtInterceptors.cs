@@ -40,7 +40,7 @@ public class CreatedUpdatedAtInterceptors : SaveChangesInterceptor
                         .Select(e => e.Entity).ToList();
         foreach (var e in updatedEntities)
         {
-           e.UpdatedAt = DateTime.Now;
+           e.UpdatedAt = DateTime.UtcNow;
         }
         foreach (var e in createdEntities)
         {
