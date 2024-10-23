@@ -4,10 +4,8 @@ using POS.Domain.UserAggregate.ValueObjects;
 
 namespace POS.Application.Common.Interfaces.Persistence;
 
-public interface IUserRepository
+public interface IUserRepository : IRepository<User,UserId>
 {
     Task<User?> GetUserByUsername(string username);
-    Task Add(User user);
-    Task<bool> ExistsAsync(UserId Id);
-    Task<bool> ExistsAsync(string username);
+     Task<bool> ExistsAsync(string username);
 }

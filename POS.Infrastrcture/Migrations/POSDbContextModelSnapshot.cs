@@ -39,6 +39,9 @@ namespace POS.Infrastrcture.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<decimal?>("ImportPrice")
                         .HasColumnType("numeric");
 

@@ -3,9 +3,8 @@ using POS.Domain.ItemAggregate.ValueObjects;
 
 namespace POS.Application.Common.Interfaces.Persistence;
 
-public interface IItemRepository
+public interface IItemRepository :IRepository<Item,ItemId>
 {
-    Task<Item?> GetById(ItemId Id);
-    Task Add(Item item);
-    Task<bool> ExistsAsync(ItemId Id);
+    Task<bool> ExistsAsync(string code);
+    Task<bool> ExistsAsync(List<string> barcodeIds);
 }

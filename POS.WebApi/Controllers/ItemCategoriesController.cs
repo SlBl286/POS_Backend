@@ -13,13 +13,13 @@ using POS.Presentation.ItemCategory;
 
 namespace POS.WebApi.Controllers;
 
-[Route("itemCategory")]
-public class ItemCategoryController : ApiController
+[Route("itemCategories")]
+public class ItemCategoriesController : ApiController
 {
     private readonly ISender _mediator;
     private readonly IMapper _mapper;
 
-    public ItemCategoryController(IMediator mediator, IMapper mapper)
+    public ItemCategoriesController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;
@@ -89,7 +89,7 @@ public class ItemCategoryController : ApiController
            errors => Problem(errors)
        );
     }
-    [HttpGet("list")]
+    [HttpGet("")]
     public async Task<IActionResult> GetList([FromQuery] GetListRequest request)
     {
         var query = _mapper.Map<GetListItemCategoryQuery>(request);

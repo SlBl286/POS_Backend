@@ -13,7 +13,7 @@ using RegisterRequest = POS.Presentation.Authentication.RegisterRequest;
 
 namespace POS.WebApi.Controllers;
 
-[Route("auth")]
+[Route("")]
 [AllowAnonymous]
 public class AuthenticationController : ApiController
 {

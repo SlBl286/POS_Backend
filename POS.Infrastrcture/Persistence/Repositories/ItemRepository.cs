@@ -7,31 +7,22 @@ using POS.Domain.UserAggregate.ValueObjects;
 
 namespace POS.Infrastrcture.Persistence.Repositories;
 
-public class ItemRepository : IItemRepository
+public class ItemRepository : Repository<Item, ItemId>, IItemRepository
 {
-    private readonly POSDbContext _dbContext;
 
-    public ItemRepository(POSDbContext dbContext)
+    public ItemRepository(POSDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
 
-    public async Task Add(Item item)
+    public async Task<bool> ExistsAsync(string code)
     {
-        var AddResult = await _dbContext.AddAsync(item);
-        _dbContext.SaveChanges();
+        var item = await _dbContext.Set<Item>().FirstOrDefaultAsync(u => u.Code == code);
+        return item is not null;
     }
 
-    public async Task<Item?> GetById(ItemId id)
+    public async Task<bool> ExistsAsync(List<string> barcodeIds)
     {
-        var item = await _dbContext.Set<Item>().FirstOrDefaultAsync(u => u.Id == id);
-        return item;
+        await Task.CompletedTask;
+        return false;
     }
-
-    public async Task<bool> ExistsAsync(ItemId Id)
-    {
-        var user = await _dbContext.FindAsync<Item>(Id.Value);
-        return user is not null;
-    }
-
 }

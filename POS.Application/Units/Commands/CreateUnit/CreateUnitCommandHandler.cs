@@ -20,7 +20,7 @@ public class CreateUnitCommandHandler : IRequestHandler<CreateUnitCommand, Error
     public async Task<ErrorOr<UnitResult>> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
     {
         if(await _unitRepository.ExistsAsync(request.Code)){
-            return Errors.ItemCategory.DuplicateCode;
+            return Errors.Unit.DuplicateCode;
         }
         var unit = Domain.UnitAggregate.Unit.Create(UnitId.CreateUnique(),request.Code,request.Name);
         await _unitRepository.Add(unit);

@@ -15,6 +15,7 @@ public sealed class Item : AggregatetRoot<ItemId, Guid>
     public decimal? WholesalePrice { get; private set; }
     public UnitId UnitId { get; private set; }
     public string? Avatar { get; private set; }
+    public string? Description { get; private set; }
     public IReadOnlyList<Barcode> Barcodes => _barcodes.AsReadOnly();
 
     private Item(ItemId id,
@@ -24,7 +25,8 @@ public sealed class Item : AggregatetRoot<ItemId, Guid>
         decimal retailPrice,
         decimal? wholesalePrice,
         UnitId unitId,
-        string avatar,
+        string? avatar,
+        string? description,
         List<Barcode> barcodes
                  ) : base(id)
     {
@@ -35,23 +37,25 @@ public sealed class Item : AggregatetRoot<ItemId, Guid>
         WholesalePrice = wholesalePrice;
         UnitId = unitId;
         Avatar = avatar;
+        Description = description;
         _barcodes = barcodes;
 
     }
 
     public static Item Create(
-        ItemId id,
+    ItemId id,
     string code,
-    decimal? importPrice,
     string name,
+    decimal? importPrice,
     decimal retailPrice,
     decimal? wholesalePrice,
     UnitId unitId,
-    string avatar,
+    string? avatar,
+    string? description,
     List<Barcode> barcodes
                             )
     {
-        return new Item(id, code, name, importPrice, retailPrice, wholesalePrice, unitId, avatar, barcodes);
+        return new Item(id, code, name, importPrice, retailPrice, wholesalePrice, unitId, avatar,description, barcodes);
     }
 
 #pragma warning disable CS0618

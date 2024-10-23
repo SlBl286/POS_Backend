@@ -9,6 +9,8 @@ namespace POS.WebApi.Controllers;
 [Authorize]
 public class ApiController : ControllerBase
 {
+    
+  
     protected IActionResult Problem(List<Error> errors)
     {
         HttpContext.Items[HttpContextItemKeys.Errors] = errors;

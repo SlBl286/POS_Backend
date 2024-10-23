@@ -6,41 +6,23 @@ using POS.Domain.UserAggregate.ValueObjects;
 
 namespace POS.Infrastrcture.Persistence.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository : Repository<User, UserId>, IUserRepository
 {
-    private readonly POSDbContext _dbContext;
 
-    public UserRepository(POSDbContext dbContext)
+    public UserRepository(POSDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
 
-    public async Task Add(User user)
+    public async Task<bool> ExistsAsync(string username)
     {
-        var a = await _dbContext.AddAsync(user);
-        _dbContext.SaveChanges();
+        var item = await _dbContext.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
+        return item is not null;
     }
 
     public async Task<User?> GetUserByUsername(string username)
     {
         var user = await _dbContext.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
         return user;
-    }
-
-    public async Task<bool> ExistsAsync(string username)
-    {
-        if (_dbContext.Set<User>() != null)
-        {
-
-            var user = await _dbContext.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
-            return user is not null;
-        }
-        else return false;
-    }
-    public async Task<bool> ExistsAsync(UserId Id)
-    {
-        var user = await _dbContext.FindAsync<User>(Id.Value);
-        return user is not null;
     }
 
 }
