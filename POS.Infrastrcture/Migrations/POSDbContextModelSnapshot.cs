@@ -22,6 +22,90 @@ namespace POS.Infrastrcture.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("POS.Domain.BillAggregate.Bill", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<Guid?>("GuestId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PayTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Bills", (string)null);
+                });
+
+            modelBuilder.Entity("POS.Domain.GuestAggregate.Guest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int?>("Gender")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("YearOfBirth")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Guests", (string)null);
+                });
+
             modelBuilder.Entity("POS.Domain.ItemAggregate.Item", b =>
                 {
                     b.Property<Guid>("Id")
@@ -194,6 +278,76 @@ namespace POS.Infrastrcture.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("POS.Domain.WarehouseAggregate.Warehouse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Warehouses", (string)null);
+                });
+
+            modelBuilder.Entity("POS.Domain.BillAggregate.Bill", b =>
+                {
+                    b.OwnsMany("POS.Domain.BillAggregate.Entities.BillDetail", "Details", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("BillDetailId");
+
+                            b1.Property<Guid>("BillId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime>("CreatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<Guid>("ItemId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("ItemId");
+
+                            b1.Property<decimal>("Quanity")
+                                .HasColumnType("numeric");
+
+                            b1.Property<DateTime>("UpdatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.HasKey("Id", "BillId");
+
+                            b1.HasIndex("BillId");
+
+                            b1.ToTable("BillDetails", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("BillId");
+                        });
+
+                    b.Navigation("Details");
+                });
+
             modelBuilder.Entity("POS.Domain.ItemAggregate.Item", b =>
                 {
                     b.OwnsMany("POS.Domain.ItemAggregate.Entities.Barcode", "Barcodes", b1 =>
@@ -262,6 +416,43 @@ namespace POS.Infrastrcture.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("ItemCategoryId");
+                        });
+
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("POS.Domain.WarehouseAggregate.Warehouse", b =>
+                {
+                    b.OwnsMany("POS.Domain.WarehouseAggregate.Entities.WarehouseItem", "Items", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("WarehouseItemId");
+
+                            b1.Property<Guid>("WarehouseId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime>("CreatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<Guid>("ItemId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("ItemId");
+
+                            b1.Property<decimal>("Quantity")
+                                .HasColumnType("numeric");
+
+                            b1.Property<DateTime>("UpdatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.HasKey("Id", "WarehouseId");
+
+                            b1.HasIndex("WarehouseId");
+
+                            b1.ToTable("WarehouseItems", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("WarehouseId");
                         });
 
                     b.Navigation("Items");

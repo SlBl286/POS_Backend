@@ -14,31 +14,28 @@ public sealed class Bill : AggregatetRoot<BillId, Guid>
     public string Code { get; private set; } = null!;
 
     public string? Description { get; private set; }
-    public DateTime BillTime { get; private set; }
-
     public GuestId? GuestId { get; private set; }
 
-    public PayTypeId? PayTypeId { get; private set; }
+    public PayTypeId PayTypeId { get; private set; }
 
     public UserId UserId { get; private set; }
 
     public IReadOnlyList<BillDetail> Details =>_details;
 
-    private Bill(BillId id, string code, string? description,DateTime billTime,GuestId? guestId,PayTypeId payTypeId,UserId userId, List<BillDetail> details) : base(id)
+    private Bill(BillId id, string code, string? description,GuestId? guestId,PayTypeId payTypeId,UserId userId, List<BillDetail> details) : base(id)
     {
         Id =  id;
         Code = code;
         Description = description;
-        BillTime = billTime;
         GuestId = guestId;
         PayTypeId = payTypeId;
         UserId = userId;
         _details = details;
     }
 
-       public static Bill Create(string code, string? description,DateTime billTime,GuestId? guestId,PayTypeId payTypeId,UserId userId,List<BillDetail> details)
+       public static Bill Create(BillId id,string code, string? description,GuestId? guestId,PayTypeId payTypeId,UserId userId,List<BillDetail> details)
     {
-        return new Bill(BillId.CreateUnique(), code,description,billTime,guestId,payTypeId,userId,details);
+        return new Bill(id, code,description,guestId,payTypeId,userId,details);
     }
 
 #pragma warning disable CS0618

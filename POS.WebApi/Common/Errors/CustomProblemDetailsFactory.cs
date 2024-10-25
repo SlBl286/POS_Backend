@@ -85,5 +85,7 @@ public class CustomProblemDetailsFactory : ProblemDetailsFactory
             //problemDetails.Extensions["errors"] = errors;
             problemDetails.Extensions.Add("errorCodes", errors?.Select(e => e.Code));
         }
+        problemDetails.Extensions.Add("success", false);
+
     }
 }

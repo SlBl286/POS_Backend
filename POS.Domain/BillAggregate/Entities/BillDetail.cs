@@ -17,9 +17,9 @@ public sealed class BillDetail : Entity<BillDetailId>
     }
 
 
-    public static BillDetail Create(ItemId itemId,decimal quanity)
+    public static BillDetail Create(BillDetailId id,ItemId itemId,decimal quanity)
     {
-        return new(BillDetailId.CreateUnique(),itemId,quanity);
+        return new(id,itemId,quanity);
     }
     #pragma warning disable CS0618
     private BillDetail() { }

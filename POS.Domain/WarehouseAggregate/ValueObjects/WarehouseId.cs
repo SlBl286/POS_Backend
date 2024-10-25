@@ -17,4 +17,8 @@ public class WarehouseId : AggregateRootId<Guid>
     {
         return new(Guid.NewGuid());
     }
+    public static WarehouseId Create(Guid Id)
+    {
+        return new(Id);
+    }
 }

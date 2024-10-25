@@ -1,3 +1,4 @@
+using System.Net;
 using ErrorOr;
 using MapsterMapper;
 using MediatR;
@@ -9,6 +10,8 @@ using POS.Application.ItemCategorys.Commands.PutItemCategory;
 using POS.Application.ItemCategorys.Common;
 using POS.Application.ItemCategorys.Queries.GetItemCategory;
 using POS.Application.ItemCategorys.Queries.GetListItemCategory;
+using POS.Domain.ItemCategoryAggregate;
+using POS.Presentation.Common;
 using POS.Presentation.ItemCategory;
 
 namespace POS.WebApi.Controllers;
@@ -24,7 +27,7 @@ public class ItemCategoriesController : ApiController
         _mediator = mediator;
         _mapper = mapper;
     }
-
+    [ProducesResponseType(typeof( ApiResponse<ItemCategoryResponse>), 201)]
     [HttpPost("")]
     public async Task<IActionResult> Create(CreateItemCategoryRequest request)
     {
@@ -32,7 +35,7 @@ public class ItemCategoriesController : ApiController
         ErrorOr<ItemCategoryResult> itemCategoryResult = await _mediator.Send(command);
 
         return itemCategoryResult.Match(
-            itemCategoryResult => Ok(_mapper.Map<ItemCategoryResponse>(itemCategoryResult)),
+            itemCategoryResult => Created("items",new ApiResponse<ItemCategoryResponse>(true,_mapper.Map<ItemCategoryResponse>(itemCategoryResult),HttpStatusCode.Created)),
             errors => Problem(errors: errors)
         );
     }
@@ -43,7 +46,7 @@ public class ItemCategoriesController : ApiController
         ErrorOr<ItemCategoryResult> itemCategoryResult = await _mediator.Send(command);
 
         return itemCategoryResult.Match(
-            itemCategoryResult => Ok(_mapper.Map<ItemCategoryResponse>(itemCategoryResult)),
+            itemCategoryResult => Ok(new ApiResponse<ItemCategoryResponse>(true,_mapper.Map<ItemCategoryResponse>(itemCategoryResult),HttpStatusCode.OK)),
             errors => Problem(errors: errors)
         );
     }
@@ -54,18 +57,27 @@ public class ItemCategoriesController : ApiController
         ErrorOr<ItemCategoryResult> itemCategoryResult = await _mediator.Send(command);
 
         return itemCategoryResult.Match(
-            itemCategoryResult => Ok(_mapper.Map<ItemCategoryResponse>(itemCategoryResult)),
+            itemCategoryResult => Ok(new ApiResponse<ItemCategoryResponse>(true,_mapper.Map<ItemCategoryResponse>(itemCategoryResult),HttpStatusCode.OK)),
             errors => Problem(errors: errors)
         );
     }
-
+     [HttpGet("")]
+    public async Task<IActionResult> GetList([FromQuery] GetListRequest request)
+    {
+        var query = _mapper.Map<GetListItemCategoryQuery>(request);
+        ErrorOr<List<ItemCategoryResult>> itemCategoriesResult = await _mediator.Send(query);
+        return itemCategoriesResult.Match(
+           itemCategoriesResult => Ok(new ApiListResponse<ItemCategoryResponse>(true,itemCategoriesResult.ConvertAll(c => _mapper.Map<ItemCategoryResponse>(c)).ToList(),HttpStatusCode.OK,10,10,1)),
+           errors => Problem(errors)
+       );
+    }
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var query = _mapper.Map<GetItemCategoryQuery>(id);
         ErrorOr<ItemCategoryResult> itemCategoryResult = await _mediator.Send(query);
         return itemCategoryResult.Match(
-           itemCategoryResult => Ok(_mapper.Map<ItemCategoryResponse>(itemCategoryResult)),
+           itemCategoryResult => Ok(new ApiResponse<ItemCategoryResponse>(true,_mapper.Map<ItemCategoryResponse>(itemCategoryResult),HttpStatusCode.OK)),
            errors => Problem(errors)
        );
     }
@@ -75,7 +87,7 @@ public class ItemCategoriesController : ApiController
         var query = _mapper.Map<DeleteItemCategoryCommand>(new List<Guid> { id });
         ErrorOr<bool> deleteResult = await _mediator.Send(query);
         return deleteResult.Match(
-           deleteResult => Ok(deleteResult),
+           deleteResult => Ok(new ApiResponse<bool>(true,deleteResult,HttpStatusCode.OK)),
            errors => Problem(errors)
        );
     }
@@ -85,18 +97,9 @@ public class ItemCategoriesController : ApiController
         var query = _mapper.Map<DeleteItemCategoryCommand>(ids);
         ErrorOr<bool> deleteResult = await _mediator.Send(query);
         return deleteResult.Match(
-           deleteResult => Ok(deleteResult),
+           deleteResult => Ok(new ApiResponse<bool>(true,deleteResult,HttpStatusCode.OK)),
            errors => Problem(errors)
        );
     }
-    [HttpGet("")]
-    public async Task<IActionResult> GetList([FromQuery] GetListRequest request)
-    {
-        var query = _mapper.Map<GetListItemCategoryQuery>(request);
-        ErrorOr<List<ItemCategoryResult>> itemCategoriesResult = await _mediator.Send(query);
-        return itemCategoriesResult.Match(
-           itemCategoriesResult => Ok(itemCategoriesResult.ConvertAll(c => _mapper.Map<ItemCategoryResponse>(c)).ToList()),
-           errors => Problem(errors)
-       );
-    }
+   
 }
