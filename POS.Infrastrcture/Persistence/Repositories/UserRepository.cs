@@ -13,15 +13,21 @@ public class UserRepository : Repository<User, UserId>, IUserRepository
     {
     }
 
+    public async Task<User?> GetUserByRefreshToken(string refreshToken)
+    {
+        var user = await _dbContext.Set<User>().AsNoTracking().FirstOrDefaultAsync(u => u.RefreshToken.Value == refreshToken);
+        return user;
+    }
+
     public async Task<bool> ExistsAsync(string username)
     {
-        var item = await _dbContext.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
-        return item is not null;
+        var user = await _dbContext.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
+        return user is not null;
     }
 
     public async Task<User?> GetUserByUsername(string username)
     {
-        var user = await _dbContext.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
+        var user = await _dbContext.Set<User>().AsNoTracking().FirstOrDefaultAsync(u => u.Username == username);
         return user;
     }
 

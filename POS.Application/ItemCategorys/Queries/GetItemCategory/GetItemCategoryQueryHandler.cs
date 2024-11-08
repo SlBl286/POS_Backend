@@ -3,7 +3,6 @@
 using ErrorOr;
 using MediatR;
 using POS.Application.Authentication.Common;
-using POS.Application.Authentication.Queries.Login;
 using POS.Application.Common.Interfaces.Authentication;
 using POS.Application.Common.Interfaces.Persistence;
 using POS.Application.Common.Interfaces.Services;

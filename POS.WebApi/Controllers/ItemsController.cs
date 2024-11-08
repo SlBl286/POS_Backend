@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using POS.Application.Authentication.Commands.Register;
 using POS.Application.Authentication.Common;
-using POS.Application.Authentication.Queries.Login;
 using POS.Application.Items.Commands.CreateItem;
 using POS.Application.Items.Commands.UpdateItem;
 using POS.Application.Items.Common;
@@ -38,7 +37,7 @@ public class ItemController : ApiController
         ErrorOr<ItemResult> itemResult = await _mediator.Send(command);
 
         return itemResult.Match(
-            itemResult => Ok(_mapper.Map<ItemRespone>(itemResult)),
+            itemResult => Created("/items",_mapper.Map<ItemRespone>(itemResult)),
             errors => Problem(errors: errors)
         );
     }
@@ -63,7 +62,7 @@ public class ItemController : ApiController
         var query = _mapper.Map<GetListItemQuery>(request);
         var itemsResult = await _mediator.Send(query);
         return itemsResult.Match(
-           itemsResult => Ok(),
+           itemsResult => Ok(itemsResult.ConvertAll(i=> _mapper.Map<ItemRespone>(i))),
            errors => Problem(errors)
        );
     }

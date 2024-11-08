@@ -5,8 +5,8 @@ using POS.Application.Common.Interfaces.Authentication;
 using POS.Application.Common.Interfaces.Persistence;
 using POS.Application.Common.Interfaces.Services;
 using POS.Domain.Common.Errors;
-using POS.Domain.ItemAggregate;
 using POS.Domain.UserAggregate;
+using POS.Domain.UserAggregate.ValueObjects;
 
 namespace POS.Application.Authentication.Commands.Register;
 
@@ -31,10 +31,10 @@ public class RegisterCommandHandler :
         {
             return Errors.User.DuplicateUserName;
         }
-        var salt = _hashStringService.GenerateSalt();
-        var hashedPassword = _hashStringService.HashPassword(command.Password, salt);
+        var hashedPassword = _hashStringService.HashPassword(command.Password, out byte[] salt);
         //Create user (generate unique ID)
-        var user = User.Create(command.FirstName,
+        var user = User.Create(UserId.CreateUnique(),
+                                command.FirstName,
                                command.LastName,
                                command.Username,
                                command.Email,
@@ -43,7 +43,8 @@ public class RegisterCommandHandler :
                                command.Avatar,
                                command.Address,
                                hashedPassword,
-                               Convert.ToBase64String(salt));
+                               Convert.ToBase64String(salt),
+                               RefreshToken.Create(DateTime.UtcNow.AddDays(7)));
 
         await _userRepository.Add(user);
         //Create JWT token

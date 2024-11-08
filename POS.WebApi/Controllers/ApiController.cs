@@ -9,8 +9,8 @@ namespace POS.WebApi.Controllers;
 [Authorize]
 public class ApiController : ControllerBase
 {
-    
-  
+
+
     protected IActionResult Problem(List<Error> errors)
     {
         HttpContext.Items[HttpContextItemKeys.Errors] = errors;
@@ -49,5 +49,10 @@ public class ApiController : ControllerBase
         }
 
         return ValidationProblem(modelStateDictionary);
+    }
+
+    protected string GetCurrentUserId()
+    {
+        return User.Claims.First().Value;
     }
 }

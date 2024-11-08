@@ -421,6 +421,32 @@ namespace POS.Infrastrcture.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("POS.Domain.UserAggregate.User", b =>
+                {
+                    b.OwnsOne("POS.Domain.UserAggregate.ValueObjects.RefreshToken", "RefreshToken", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime>("ExpireTime")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("RefreshToken")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("POS.Domain.WarehouseAggregate.Warehouse", b =>
                 {
                     b.OwnsMany("POS.Domain.WarehouseAggregate.Entities.WarehouseItem", "Items", b1 =>

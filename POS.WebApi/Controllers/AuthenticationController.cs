@@ -2,11 +2,11 @@ using ErrorOr;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using POS.Application.Authentication.Commands.Login;
+using POS.Application.Authentication.Commands.Refresh;
 using POS.Application.Authentication.Commands.Register;
 using POS.Application.Authentication.Common;
-using POS.Application.Authentication.Queries.Login;
 using POS.Presentation.Authentication;
 using LoginRequest = POS.Presentation.Authentication.LoginRequest;
 using RegisterRequest = POS.Presentation.Authentication.RegisterRequest;
@@ -42,7 +42,18 @@ public class AuthenticationController : ApiController
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var query = _mapper.Map<LoginQuery>(request);
+        var query = _mapper.Map<LoginCommand>(request);
+        ErrorOr<AuthenticationResult> authResult = await _mediator.Send(query);
+        return authResult.Match(
+           authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+           errors => Problem(errors)
+       );
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh(Presentation.Authentication.RefreshRequest request)
+    {
+        var query = _mapper.Map<RefreshCommand>(request);
         ErrorOr<AuthenticationResult> authResult = await _mediator.Send(query);
         return authResult.Match(
            authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),

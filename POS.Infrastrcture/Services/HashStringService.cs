@@ -10,11 +10,9 @@ public class HashStringService : IHashStringService
     private readonly int _iterations = 350000;
     private readonly HashAlgorithmName _hashAlgorithm = HashAlgorithmName.SHA512;
 
-    public byte[] GenerateSalt(){
-        return RandomNumberGenerator.GetBytes(_keySize);
-    }
-    public string HashPassword(string password,  byte[] salt)
+    public string HashPassword(string password,out  byte[] salt)
     {
+          salt =   RandomNumberGenerator.GetBytes(_keySize);
         var hash = Rfc2898DeriveBytes.Pbkdf2(
             Encoding.UTF8.GetBytes(password),
             salt,

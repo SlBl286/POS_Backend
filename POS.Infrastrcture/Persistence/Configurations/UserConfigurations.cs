@@ -43,6 +43,7 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
             .HasMaxLength(255);
         builder.Property(m => m.HashedPassword)
             .HasMaxLength(255);
+        builder.OwnsOne(u=> u.RefreshToken);
         builder
        .HasIndex(u => u.Username)
        .IsUnique();

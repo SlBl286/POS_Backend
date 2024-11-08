@@ -38,6 +38,7 @@ var builder = WebApplication.CreateBuilder(args);
             }
         });
     });
+    builder.Services.AddCors();
 }
 
 var app = builder.Build();
@@ -49,7 +50,7 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
-
+   app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173"));
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
