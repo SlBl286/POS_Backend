@@ -1,0 +1,3 @@
+[submodule "pos-fe"]
+	path = pos-fe
+	url = https://github.com/SlBl286/pos-fe.git
