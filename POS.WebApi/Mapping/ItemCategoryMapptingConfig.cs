@@ -27,6 +27,9 @@ public class ItemCategoryMapptingConfig : IRegister
                 config.NewConfig<ItemCategoryResult, ItemCategoryResponse>()
                         .Map(dest => dest.Id, src => src.ItemCategory.Id.Value.ToString())
                          .Map(dest => dest, src => src.ItemCategory);
+                config.NewConfig<ItemCategoriesResult, ItemCategoriesResponse>()
+                   .Map(dest => dest, src => src)
+                    .Map(dest => dest.Items, src => src.ItemCategories);
 
         }
 }

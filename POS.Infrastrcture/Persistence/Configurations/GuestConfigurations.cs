@@ -39,5 +39,9 @@ public class GuestConfigurations : IEntityTypeConfiguration<Guest>
        .HasIndex(u => u.Code)
        .IsUnique();
 
+            builder.HasGeneratedTsVectorColumn(g=>g.SearchVector,"english",
+        g=> new {g.Code, g.Name,g.Address}
+       ).HasIndex(ic=> ic.SearchVector)
+       .HasMethod("GIN");
     }
 }

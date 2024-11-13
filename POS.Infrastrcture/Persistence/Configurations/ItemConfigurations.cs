@@ -35,6 +35,10 @@ public class ItemConfigurations : IEntityTypeConfiguration<Item>
                     value => BarcodeId.Create(value)
             );
             sb.Property(b => b.Code).HasMaxLength(100);
+              builder.HasGeneratedTsVectorColumn(i => i.SearchVector, "english",
+     i => new { i.Code, i.Name, i.Description }
+    ).HasIndex(ic => ic.SearchVector)
+    .HasMethod("GIN");
 
         });
 
@@ -70,6 +74,11 @@ public class ItemConfigurations : IEntityTypeConfiguration<Item>
         builder
        .HasIndex(u => u.Code)
        .IsUnique();
+
+        builder.HasGeneratedTsVectorColumn(i => i.SearchVector, "english",
+     i => new { i.Code, i.Name, i.Description })
+     .HasIndex(ic => ic.SearchVector)
+    .HasMethod("GIN");
 
     }
 }

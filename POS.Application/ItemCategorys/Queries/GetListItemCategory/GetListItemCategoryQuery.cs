@@ -5,4 +5,7 @@ using POS.Application.ItemCategorys.Common;
 namespace POS.Application.ItemCategorys.Queries.GetListItemCategory;
 
 public record GetListItemCategoryQuery(
-): IRequest<ErrorOr<List<ItemCategoryResult>>>;
+    string? Keyword,
+    int Page,
+    int PageSize
+): IRequest<ErrorOr<ItemCategoriesResult>>;

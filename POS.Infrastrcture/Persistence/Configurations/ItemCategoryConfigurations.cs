@@ -69,5 +69,10 @@ public class ItemCategoryConfigurations : IEntityTypeConfiguration<ItemCategory>
        .HasIndex(u => u.Code)
        .IsUnique();
 
+       builder.HasGeneratedTsVectorColumn(ic=>ic.SearchVector,"english",
+        ic=> new {ic.Code, ic.Name, ic.Description}
+       ).HasIndex(ic=> ic.SearchVector)
+       .HasMethod("GIN");
+
     }
 }

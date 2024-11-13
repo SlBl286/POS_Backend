@@ -35,7 +35,7 @@ public class ItemCategoriesController : ApiController
         ErrorOr<ItemCategoryResult> itemCategoryResult = await _mediator.Send(command);
 
         return itemCategoryResult.Match(
-            itemCategoryResult => Created("items",new ApiResponse<ItemCategoryResponse>(true,_mapper.Map<ItemCategoryResponse>(itemCategoryResult),HttpStatusCode.Created)),
+            itemCategoryResult => Created("itemCategory",_mapper.Map<ItemCategoryResponse>(itemCategoryResult)),
             errors => Problem(errors: errors)
         );
     }
@@ -46,7 +46,7 @@ public class ItemCategoriesController : ApiController
         ErrorOr<ItemCategoryResult> itemCategoryResult = await _mediator.Send(command);
 
         return itemCategoryResult.Match(
-            itemCategoryResult => Ok(new ApiResponse<ItemCategoryResponse>(true,_mapper.Map<ItemCategoryResponse>(itemCategoryResult),HttpStatusCode.OK)),
+            itemCategoryResult => Ok(_mapper.Map<ItemCategoryResponse>(itemCategoryResult)),
             errors => Problem(errors: errors)
         );
     }
@@ -57,7 +57,7 @@ public class ItemCategoriesController : ApiController
         ErrorOr<ItemCategoryResult> itemCategoryResult = await _mediator.Send(command);
 
         return itemCategoryResult.Match(
-            itemCategoryResult => Ok(new ApiResponse<ItemCategoryResponse>(true,_mapper.Map<ItemCategoryResponse>(itemCategoryResult),HttpStatusCode.OK)),
+            itemCategoryResult => Ok(_mapper.Map<ItemCategoryResponse>(itemCategoryResult)),
             errors => Problem(errors: errors)
         );
     }
@@ -65,9 +65,9 @@ public class ItemCategoriesController : ApiController
     public async Task<IActionResult> GetList([FromQuery] GetListRequest request)
     {
         var query = _mapper.Map<GetListItemCategoryQuery>(request);
-        ErrorOr<List<ItemCategoryResult>> itemCategoriesResult = await _mediator.Send(query);
+        ErrorOr<ItemCategoriesResult> itemCategoriesResult = await _mediator.Send(query);
         return itemCategoriesResult.Match(
-           itemCategoriesResult => Ok(new ApiListResponse<ItemCategoryResponse>(true,itemCategoriesResult.ConvertAll(c => _mapper.Map<ItemCategoryResponse>(c)).ToList(),HttpStatusCode.OK,10,10,1)),
+           itemCategoriesResult => Ok(_mapper.Map<ItemCategoriesResponse>(itemCategoriesResult)),
            errors => Problem(errors)
        );
     }
@@ -77,7 +77,7 @@ public class ItemCategoriesController : ApiController
         var query = _mapper.Map<GetItemCategoryQuery>(id);
         ErrorOr<ItemCategoryResult> itemCategoryResult = await _mediator.Send(query);
         return itemCategoryResult.Match(
-           itemCategoryResult => Ok(new ApiResponse<ItemCategoryResponse>(true,_mapper.Map<ItemCategoryResponse>(itemCategoryResult),HttpStatusCode.OK)),
+           itemCategoryResult => Ok(_mapper.Map<ItemCategoryResponse>(itemCategoryResult)),
            errors => Problem(errors)
        );
     }
@@ -87,7 +87,7 @@ public class ItemCategoriesController : ApiController
         var query = _mapper.Map<DeleteItemCategoryCommand>(new List<Guid> { id });
         ErrorOr<bool> deleteResult = await _mediator.Send(query);
         return deleteResult.Match(
-           deleteResult => Ok(new ApiResponse<bool>(true,deleteResult,HttpStatusCode.OK)),
+           deleteResult => Ok(deleteResult),
            errors => Problem(errors)
        );
     }
@@ -97,7 +97,7 @@ public class ItemCategoriesController : ApiController
         var query = _mapper.Map<DeleteItemCategoryCommand>(ids);
         ErrorOr<bool> deleteResult = await _mediator.Send(query);
         return deleteResult.Match(
-           deleteResult => Ok(new ApiResponse<bool>(true,deleteResult,HttpStatusCode.OK)),
+           deleteResult => Ok(deleteResult),
            errors => Problem(errors)
        );
     }

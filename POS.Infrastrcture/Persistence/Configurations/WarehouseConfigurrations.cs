@@ -68,5 +68,10 @@ public class WarehouseConfigurrations : IEntityTypeConfiguration<Warehouse>
        .HasIndex(u => u.Code)
        .IsUnique();
 
+        builder.HasGeneratedTsVectorColumn(wh=>wh.SearchVector,"english",
+        wh=> new {wh.Code, wh.Name, wh.Description}
+       ).HasIndex(ic=> ic.SearchVector)
+       .HasMethod("GIN");
+
     }
 }

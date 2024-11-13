@@ -33,6 +33,9 @@ public class UnitConfigurations : IEntityTypeConfiguration<Unit>
         builder
        .HasIndex(u => u.Code)
        .IsUnique();
-
+        builder.HasGeneratedTsVectorColumn(u => u.SearchVector, "english",
+       u => new { u.Code, u.Name }
+      ).HasIndex(ic => ic.SearchVector)
+      .HasMethod("GIN");
     }
 }

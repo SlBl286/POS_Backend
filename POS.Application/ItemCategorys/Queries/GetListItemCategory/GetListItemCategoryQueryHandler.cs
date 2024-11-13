@@ -10,7 +10,7 @@ using POS.Domain.Common.Errors;
 namespace POS.Application.ItemCategorys.Queries.GetListItemCategory;
 
 public class GetListItemCategoryQueryHandler :
-    IRequestHandler<GetListItemCategoryQuery, ErrorOr<List<ItemCategoryResult>>>
+    IRequestHandler<GetListItemCategoryQuery, ErrorOr<ItemCategoriesResult>>
 {
     private readonly IItemCategoryRepository _itemCategoryRepository;
 
@@ -19,14 +19,16 @@ public class GetListItemCategoryQueryHandler :
         _itemCategoryRepository = itemCategoryRepository;
     }
 
-    public async Task<ErrorOr<List<ItemCategoryResult>>> Handle(GetListItemCategoryQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<ItemCategoriesResult>> Handle(GetListItemCategoryQuery request, CancellationToken cancellationToken)
     {
-         var categories = await _itemCategoryRepository.GetList();
+        var categories = await _itemCategoryRepository.GetListPage(request.Keyword, request.Page, request.PageSize);
+        var total = (await _itemCategoryRepository.GetList()).Count();
         if (categories is null)
         {
             return Errors.ItemCategory.NotExsits;
         }
 
-        return categories.ConvertAll(c =>  new ItemCategoryResult(c)).ToList();
+        return new ItemCategoriesResult(categories.ConvertAll(c=> new ItemCategoryResult(c)),total,total/categories.Count(), request.Page);
+
     }
 }

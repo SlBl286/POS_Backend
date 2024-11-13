@@ -1,3 +1,5 @@
+using NpgsqlTypes;
+
 namespace POS.Domain.Common.Models;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents, IBaseEntity
@@ -11,6 +13,7 @@ where TId : notnull
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
+   
 
     protected Entity(TId id)
     {

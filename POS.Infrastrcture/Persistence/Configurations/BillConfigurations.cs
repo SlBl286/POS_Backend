@@ -89,5 +89,10 @@ public class BillConfigurations : IEntityTypeConfiguration<Bill>
        .HasIndex(u => u.Code)
        .IsUnique();
 
+
+        builder.HasGeneratedTsVectorColumn(b => b.SearchVector, "english",
+    b => new { b.Code, b.Description }
+   ).HasIndex(ic => ic.SearchVector)
+   .HasMethod("GIN");
     }
 }

@@ -43,10 +43,14 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
             .HasMaxLength(255);
         builder.Property(m => m.HashedPassword)
             .HasMaxLength(255);
-        builder.OwnsOne(u=> u.RefreshToken);
+        builder.OwnsOne(u => u.RefreshToken);
         builder
        .HasIndex(u => u.Username)
        .IsUnique();
 
+        builder.HasGeneratedTsVectorColumn(u => u.SearchVector, "english",
+       u => new { u.Username, u.Address, u.FirstName, u.LastName }
+      ).HasIndex(ic => ic.SearchVector)
+      .HasMethod("GIN");
     }
 }

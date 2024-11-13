@@ -8,5 +8,6 @@ namespace POS.Application.Common.Interfaces.Persistence;
 public interface IItemCategoryRepository : IRepository<ItemCategory,ItemCategoryId>
 {
     Task<bool> ExistsAsync(string code);
+    Task<List<ItemCategory>> GetListPage(string? Keyword, int Page, int PageSize);
 
 }
