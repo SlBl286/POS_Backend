@@ -10,6 +10,7 @@ using POS.Application.ItemCategorys.Commands.PutItemCategory;
 using POS.Application.ItemCategorys.Common;
 using POS.Application.ItemCategorys.Queries.GetItemCategory;
 using POS.Application.ItemCategorys.Queries.GetListItemCategory;
+using POS.Application.ItemCategorys.Queries.GetListItemCategoryPaged;
 using POS.Domain.ItemCategoryAggregate;
 using POS.Presentation.Common;
 using POS.Presentation.ItemCategory;
@@ -61,13 +62,23 @@ public class ItemCategoriesController : ApiController
             errors => Problem(errors: errors)
         );
     }
-     [HttpGet("")]
+    [HttpGet("")]
     public async Task<IActionResult> GetList([FromQuery] GetListRequest request)
     {
         var query = _mapper.Map<GetListItemCategoryQuery>(request);
         ErrorOr<ItemCategoriesResult> itemCategoriesResult = await _mediator.Send(query);
         return itemCategoriesResult.Match(
            itemCategoriesResult => Ok(_mapper.Map<ItemCategoriesResponse>(itemCategoriesResult)),
+           errors => Problem(errors)
+       );
+    }
+    [HttpGet("/itemCategoriesPaged")]
+    public async Task<IActionResult> GetListPaged([FromQuery] GetListPagedRequest request)
+    {
+        var query = _mapper.Map<GetListPagedItemCategoryQuery>(request);
+        ErrorOr<ItemCategoriesPagedResult> itemCategoriesResult = await _mediator.Send(query);
+        return itemCategoriesResult.Match(
+           itemCategoriesResult => Ok(_mapper.Map<ItemCategoriesPagedResponse>(itemCategoriesResult)),
            errors => Problem(errors)
        );
     }

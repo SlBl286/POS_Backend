@@ -21,14 +21,13 @@ public class GetListItemCategoryQueryHandler :
 
     public async Task<ErrorOr<ItemCategoriesResult>> Handle(GetListItemCategoryQuery request, CancellationToken cancellationToken)
     {
-        var categories = await _itemCategoryRepository.GetListPage(request.Keyword, request.Page, request.PageSize);
-        var total = (await _itemCategoryRepository.GetList()).Count();
+        var categories = await _itemCategoryRepository.GetList();
         if (categories is null)
         {
             return Errors.ItemCategory.NotExsits;
         }
 
-        return new ItemCategoriesResult(categories.ConvertAll(c=> new ItemCategoryResult(c)),total,total/categories.Count(), request.Page);
+        return new ItemCategoriesResult(categories.ConvertAll(c=> new ItemCategoryResult(c)));
 
     }
 }

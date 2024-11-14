@@ -8,6 +8,7 @@ using POS.Application.ItemCategorys.Commands.PutItemCategory;
 using POS.Application.ItemCategorys.Common;
 using POS.Application.ItemCategorys.Queries.GetItemCategory;
 using POS.Application.ItemCategorys.Queries.GetListItemCategory;
+using POS.Application.ItemCategorys.Queries.GetListItemCategoryPaged;
 using POS.Domain.ItemCategoryAggregate.ValueObjects;
 using POS.Presentation.ItemCategory;
 
@@ -20,6 +21,7 @@ public class ItemCategoryMapptingConfig : IRegister
                 config.NewConfig<CreateItemCategoryRequest, CreateItemCategoryCommand>();
                 config.NewConfig<PutItemCategoryRequest, PutItemCategoryCommand>();
                 config.NewConfig<GetListRequest, GetListItemCategoryQuery>();
+                config.NewConfig<GetListPagedRequest, GetListPagedItemCategoryQuery>();
                 config.NewConfig<List<Guid>, DeleteItemCategoryCommand>()
                         .Map(dest => dest.Ids, src => src);
                 config.NewConfig<Guid, GetItemCategoryQuery>()
@@ -30,6 +32,9 @@ public class ItemCategoryMapptingConfig : IRegister
                 config.NewConfig<ItemCategoriesResult, ItemCategoriesResponse>()
                    .Map(dest => dest, src => src)
                     .Map(dest => dest.Items, src => src.ItemCategories);
+                config.NewConfig<ItemCategoriesPagedResult, ItemCategoriesPagedResponse>()
+                        .Map(dest => dest, src => src)
+                        .Map(dest => dest.Items, src => src.ItemCategories);
 
         }
 }

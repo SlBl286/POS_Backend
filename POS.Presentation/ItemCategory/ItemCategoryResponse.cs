@@ -3,6 +3,9 @@
 namespace POS.Presentation.ItemCategory;
 
 public record ItemCategoriesResponse(
+    List<ItemCategoryResponse> Items
+);
+public record ItemCategoriesPagedResponse(
     List<ItemCategoryResponse> Items,
     int Total,
     int PageCount,
